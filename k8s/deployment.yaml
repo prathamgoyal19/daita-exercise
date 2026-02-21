@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: do-uno-api
+  namespace: do-uno
+  labels:
+    app: do-uno-api
+spec:
+  replicas: 3
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: do-uno-api
+  template:
+    metadata:
+      labels:
+        app: do-uno-api
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: do-uno-api
+          # image: ghcr.io/your-org/do-uno:latest
+          # imagePullPolicy: IfNotPresent
+          image: do-uno:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+              name: http
+          env:
+            # Example envs; add more if app supports them
+            - name: APP_ENV
+              value: "production"
+            - name: LOG_LEVEL
+              value: "info"
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 3
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 10
+      restartPolicy: Always

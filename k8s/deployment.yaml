@@ -23,10 +23,8 @@ spec:
         fsGroup: 1000
       containers:
         - name: do-uno-api
-          # image: ghcr.io/your-org/do-uno:latest
-          # imagePullPolicy: IfNotPresent
-          image: do-uno:local
-          imagePullPolicy: Never
+          image: ghcr.io/prathamgoyal/do-exercise:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
               name: http

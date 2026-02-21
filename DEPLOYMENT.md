@@ -1,5 +1,5 @@
 
-# 🚀 Task Management API - Production Deployment Guide
+# Task Management API - Production Deployment Guide
 
 This guide provides the necessary steps to build, test, and deploy the Task Management API using Docker and Kubernetes.
 
